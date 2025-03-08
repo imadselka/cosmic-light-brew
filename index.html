@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Light Brew</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f0f1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #6633cc;
+            box-shadow: 0 0 20px #9966ff;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #9966ff;
+            font-size: 24px;
+            text-align: center;
+        }
+        #loading .spinner {
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(153, 102, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #9966ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        #debug {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            color: #9966ff;
+            font-size: 12px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+            max-width: 300px;
+            max-height: 100px;
+            overflow: auto;
+        }
+        #controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: #9966ff;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Loading Cosmic Light Brew...</p>
+    </div>
+    
+    <div id="controls">
+        <h3>Controls</h3>
+        <p>Arrow Keys: Move spaceship</p>
+        <p>Mouse: Drag mirrors to redirect light</p>
+    </div>
+    
+    <div id="debug"></div>
+    
+    <!-- Phaser Library -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    
+    <!-- Game Assets -->
+    <script src="assets/placeholder.js"></script>
+    
+    <!-- Game Logic -->
+    <script src="js/audioFallback.js"></script>
+    <script src="js/soundManager.js"></script>
+    <script src="js/game.js"></script>
+    
+    <script>
+        // Debug logger
+        const debugElement = document.getElementById('debug');
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const originalConsoleWarn = console.warn;
+        
+        console.log = function() {
+            originalConsoleLog.apply(console, arguments);
+            const message = Array.from(arguments).join(' ');
+            debugElement.innerHTML += `<div>LOG: ${message}</div>`;
+            debugElement.scrollTop = debugElement.scrollHeight;
+        };
+        
+        console.error = function() {
+            originalConsoleError.apply(console, arguments);
+            const message = Array.from(arguments).join(' ');
+            debugElement.innerHTML += `<div style="color: red;">ERROR: ${message}</div>`;
+            debugElement.scrollTop = debugElement.scrollHeight;
+        };
+        
+        console.warn = function() {
+            originalConsoleWarn.apply(console, arguments);
+            const message = Array.from(arguments).join(' ');
+            debugElement.innerHTML += `<div style="color: orange;">WARN: ${message}</div>`;
+            debugElement.scrollTop = debugElement.scrollHeight;
+        };
+        
+        // Hide loading screen when game is ready
+        window.addEventListener('load', function() {
+            console.log("Page loaded, initializing game...");
+            // Give a little extra time for the game to initialize
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+                console.log("Loading screen hidden");
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 
